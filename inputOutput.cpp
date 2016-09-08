@@ -22,6 +22,6 @@ class inputOutput {
 
 int main() {
 	inputOutput a("test.txt");
-	a.write("oi");
+	a.write("oi oi oi");
 	return 0;
 }
