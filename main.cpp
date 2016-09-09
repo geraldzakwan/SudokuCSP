@@ -4,17 +4,18 @@ int main() {
 	XMLComposer a("Variabel.xml");
 	XMLComposer b("HorizontalConstraintBaris0.xml");
 	XMLComposer c("VerticalConstraintKolom0.xml");
+	XMLComposer d("Final.xml");
 
-	a.open();
-	b.open();
-	c.open();
+	d.open();
 
-	a.writeAllVariables();
-	b.writeSingleHorizontalConstraint(0);
-	c.writeSingleVerticalConstraint(0);
+	d.writeHeader();
+	d.writeAllVariables();
+	for (int i=0; i<9; i++) {
+		d.writeSingleHorizontalConstraint(i);
+		d.writeSingleVerticalConstraint(i);
+	}
+	d.writeFooter();
 
-	a.close();
-	b.close();
-	c.close();
+	d.close();
 	return 0;
 }

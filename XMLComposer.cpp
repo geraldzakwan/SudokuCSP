@@ -4,6 +4,9 @@
 using namespace std;
 
 class XMLComposer {
+
+	int tileKeisi[82];
+
 	private:
 		ofstream outFile;
 		const char* fileName;
@@ -11,6 +14,33 @@ class XMLComposer {
 	public:
 		XMLComposer(const char* filename) {
 			fileName = filename;
+			isiArray();
+		}
+
+		void isiArray() {
+			for (int i=0; i<82; i++) {
+				if(i==4 || i==18 || i==75){
+					tileKeisi[i] = 1;
+				}else if(i==16 || i==50 || i==55 || i==67){
+					tileKeisi[i] = 2;
+				}else if(i==58){
+					tileKeisi[i] = 3;
+				}else if(i==23 || i==78){
+					tileKeisi[i] = 4;
+				}else if(i==9 || i==12 || i==79){
+					tileKeisi[i] = 5;
+				}else if(i==51 || i==63 ){
+					tileKeisi[i] = 6;
+				}else if(i==40 || i==80){
+					tileKeisi[i] = 7;
+				}else if(i==19 || i==32){
+					tileKeisi[i] = 8;
+				}else if(i==1 || i==14 || i==54 || i==76){
+					tileKeisi[i] = 9;
+				}else {
+					tileKeisi[i] = 0;
+				}
+			}
 		}
 
 		void open() {
@@ -33,21 +63,13 @@ class XMLComposer {
 
 		void writeFooter() {
 			outFile << "</CSP>" << endl;
-			outFile << "</CSPIF" << endl;
+			outFile << "</CSPIF>" << endl;
 		}
 
 		void writeAllVariables() {
 			Koordinat pos(800,575);
 			int min = 1;
 			int max = 81;
-			
-			outFile << "<CSPIF VERSION=\"0.01\">" <<endl;
-			outFile << "<CSP>" <<endl;
-			outFile << "<NAME>Untitled</NAME>" <<endl;
-			outFile << "<DESCRIPTION>" <<endl;
-			outFile << " <SHORT></SHORT>" <<endl;
-			outFile << " <DETAILED></DETAILED>"<<endl;
-			outFile << "</DESCRIPTION>" <<endl;
 
 			for(int i=min;i<=max;i++){
 				outFile << "<VARIABLE TYPE=\"Integer\">" <<endl;
@@ -61,28 +83,12 @@ class XMLComposer {
 
 				outFile << " <NAME>T" << i << "</NAME>" <<endl;
 
-				if(i==4 || i==18 || i==75){
-					outFile << " <VALUE>"<<1<<"</VALUE>" <<endl;
-				}else if(i==16 || i==50 || i==55 || i==67){
-					outFile << " <VALUE>"<<2<<"</VALUE>" <<endl;
-				}else if(i==58){
-					outFile << " <VALUE>"<<3<<"</VALUE>" <<endl;
-				}else if(i==23 || i==78){
-					outFile << " <VALUE>"<<4<<"</VALUE>" <<endl;
-				}else if(i==9 || i==12 || i==79){
-					outFile << " <VALUE>"<<5<<"</VALUE>" <<endl;
-				}else if(i==51 || i==63 ){
-					outFile << " <VALUE>"<<6<<"</VALUE>" <<endl;
-				}else if(i==40 || i==80){
-					outFile << " <VALUE>"<<7<<"</VALUE>" <<endl;
-				}else if(i==19 || i==32){
-					outFile << " <VALUE>"<<8<<"</VALUE>" <<endl;
-				}else if(i==1 || i==14 || i==54 || i==76){
-					outFile << " <VALUE>"<<9<<"</VALUE>" <<endl;
-				}else{
+				if (tileKeisi[i]==0) {
 					for(int j=1;j<=9;j++){
 						outFile << " <VALUE>"<<j<<"</VALUE>" <<endl;
 					}
+				} else {
+					outFile << " <VALUE>"<< convertIntToStr(tileKeisi[i]) <<"</VALUE>" <<endl;
 				}
 				
 				//print
@@ -90,38 +96,60 @@ class XMLComposer {
 					//pos.x = 300;
 					pos.setX(300);
 					//pos.y +=2000;
-					pos.setY(pos.getY() + 2000);
+					pos.setY(pos.getY() + 500);
 				}else{
 					//pos.x += 2000;
-					pos.setX(pos.getX() + 2000);
+					pos.setX(pos.getX() + 500);
 				}
 
 				outFile<<"<PROPERTY>position = ("<<pos.getX()<<".0, "<< pos.getY()<<".0)"<<"</PROPERTY>"<<endl;
 				outFile << "</VARIABLE>"<<endl;
 			}
-			outFile << "</CSP>" <<endl;
-			outFile << "</CSPIF>" <<endl;
 		}
 
-		void writeSingleConstraint(string constraintName, string var1, string var2) {
-			outFile << "<CONSTRAINT TYPE=\"Custom\">" << endl;
-			outFile << "<CUSTOMNAME>" << constraintName << "</CUSTOMNAME>" << endl;
-			outFile << "<GIVEN>" << var1 << "</GIVEN>" << endl;
-			outFile << "<GIVEN>" << var2 << "</GIVEN>" << endl;
-			outFile << "<TABLE>" << endl;
-			
-			for (int i=1; i<10; i++) {
-				for (int j=1; j<10; j++) {
-					if (i==j) {
-						outFile << " F";
-					} else {
-						outFile << " T";
-					}
-				}	
+		void writeSingleConstraint(string constraintName, int var1, int var2) {
+			if (tileKeisi[var1] == 0) {
+				outFile << "<CONSTRAINT TYPE=\"Custom\">" << endl;
+				outFile << "<CUSTOMNAME>" << constraintName << "</CUSTOMNAME>" << endl;
+				outFile << "<GIVEN>T" << convertIntToStr(var1) << "</GIVEN>" << endl;
+				outFile << "<GIVEN>T" << convertIntToStr(var2) << "</GIVEN>" << endl;
+				outFile << "<TABLE>" << endl;
+				if (tileKeisi[var2] == 0) {
+					//Constraint 9x9
+					for (int i=1; i<10; i++) {
+						for (int j=1; j<10; j++) {
+							if (i==j) {
+								outFile << " F";
+							} else {
+								outFile << " T";
+							}
+						}	
+					} 
+				} else {
+					//Constraint 9x1
+					writeTrueFalse(tileKeisi[var2]);
+				}
+				outFile << endl;
+				outFile << "</TABLE>" << endl;
+				outFile << "<PROPERTY>position = (4622.507, 4338.3887)</PROPERTY>" << endl;
+				outFile << "</CONSTRAINT>" << endl;
+			} else {
+				//Constraint 1x9
+				if (tileKeisi[var2] == 0) {
+					outFile << "<CONSTRAINT TYPE=\"Custom\">" << endl;
+					outFile << "<CUSTOMNAME>" << constraintName << "</CUSTOMNAME>" << endl;
+					outFile << "<GIVEN>T" << convertIntToStr(var1) << "</GIVEN>" << endl;
+					outFile << "<GIVEN>T" << convertIntToStr(var2) << "</GIVEN>" << endl;
+					outFile << "<TABLE>" << endl;
+					writeTrueFalse(tileKeisi[var1]);
+					outFile << endl;
+					outFile << "</TABLE>" << endl;
+					outFile << "<PROPERTY>position = (4622.507, 4338.3887)</PROPERTY>" << endl;
+					outFile << "</CONSTRAINT>" << endl;
+				} else {
+				//Constraint-nya ngk perlu
+				}
 			}
-
-			outFile << endl;
-			outFile << "</TABLE>" << endl;
 		}
 
 		void writeSingleHorizontalConstraint(int row) {
@@ -147,10 +175,15 @@ class XMLComposer {
 					string var2 = t + row2 + col2;
 					*/
 
+					/*
 					string var1 = t + convertIntToStr(i+1);
 					string var2 = t + convertIntToStr(j+1);
+					*/
 
-					string constraintName = c + u + var1 + u + var2;
+					int var1 = i+1;
+					int var2 = j+1;
+
+					string constraintName = c + u + convertIntToStr(var1) + u + convertIntToStr(var2);
 					writeSingleConstraint(constraintName, var1, var2);
 				}
 			}
@@ -176,10 +209,15 @@ class XMLComposer {
 					string var2 = t + row2 + col2;
 					*/
 
+					/*
 					string var1 = t + convertIntToStr(i+1);
 					string var2 = t + convertIntToStr(j+1);
+					*/
 
-					string constraintName = c + u + var1 + u + var2;
+					int var1 = i+1;
+					int var2 = j+1;
+
+					string constraintName = c + u + convertIntToStr(var1) + u + convertIntToStr(var2);
 					writeSingleConstraint(constraintName, var1, var2);
 				}
 			}
@@ -187,6 +225,18 @@ class XMLComposer {
 
 		void writeSingleBoxConstraint(int box) {
 			
+		}
+
+		void writeTrueFalse(int falsePlace) {
+			if (falsePlace!=-1) {
+				for (int i=1; i<=9; i++) {
+					if (i==falsePlace) {
+						outFile << " F";
+					} else {
+						outFile << " T";
+					}
+				}
+			}
 		}
 
 		static string convertIntToStr(int input) {
