@@ -36,14 +36,10 @@ class XMLComposer {
 			outFile << "</CSPIF" << endl;
 		}
 
-		void writeSingleVariable(string name, int domain[]) {
-			
-		}
-
 		void writeAllVariables() {
 			Koordinat pos(800,575);
-			int min = 0;
-			int max = 80;
+			int min = 1;
+			int max = 81;
 			
 			outFile << "<CSPIF VERSION=\"0.01\">" <<endl;
 			outFile << "<CSP>" <<endl;
@@ -56,10 +52,14 @@ class XMLComposer {
 			for(int i=min;i<=max;i++){
 				outFile << "<VARIABLE TYPE=\"Integer\">" <<endl;
 
+				/*
 				string row = convertIntToStr((int)i/9);
 				string col = convertIntToStr((int)(i%9));
+				*/
 
-				outFile << " <NAME>T" << row << col << "</NAME>" <<endl;
+				//outFile << " <NAME>T" << row << col << "</NAME>" <<endl;
+
+				outFile << " <NAME>T" << i << "</NAME>" <<endl;
 
 				if(i==4 || i==18 || i==75){
 					outFile << " <VALUE>"<<1<<"</VALUE>" <<endl;
@@ -109,17 +109,17 @@ class XMLComposer {
 			outFile << "<GIVEN>" << var1 << "</GIVEN>" << endl;
 			outFile << "<GIVEN>" << var2 << "</GIVEN>" << endl;
 			outFile << "<TABLE>" << endl;
-			if (!isSingleDomain()) {
-				for (int i=1; i<10; i++) {
-					for (int j=1; j<10; j++) {
-						if (i==j) {
-							outFile << " F";
-						} else {
-							outFile << " T";
-						}
-					}	
-				}
+			
+			for (int i=1; i<10; i++) {
+				for (int j=1; j<10; j++) {
+					if (i==j) {
+						outFile << " F";
+					} else {
+						outFile << " T";
+					}
+				}	
 			}
+
 			outFile << endl;
 			outFile << "</TABLE>" << endl;
 		}
@@ -130,16 +130,25 @@ class XMLComposer {
 			string t = "T";
 
 			for (int i=9*row; i<=8+9*row; i++) {
+				/*
 				string row1 = convertIntToStr((int)i/9);
 				string col1 = convertIntToStr((int)(i%9));
+				*/
 
 				for (int j=i+1; j<=8+9*row; j++) {
 
+					/*
 					string row2 = convertIntToStr((int)j/9);
 					string col2 = convertIntToStr((int)(j%9));
+					*/
 
+					/*
 					string var1 = t + row1 + col1;
 					string var2 = t + row2 + col2;
+					*/
+
+					string var1 = t + convertIntToStr(i+1);
+					string var2 = t + convertIntToStr(j+1);
 
 					string constraintName = c + u + var1 + u + var2;
 					writeSingleConstraint(constraintName, var1, var2);
@@ -153,16 +162,22 @@ class XMLComposer {
 			string t = "T";
 
 			for (int i=col; i<=col+9*8; i=i+9) {
+				/*
 				string row1 = convertIntToStr((int)i/9);
 				string col1 = convertIntToStr((int)(i%9));
+				*/
 
 				for (int j=i+9; j<=col+9*8; j=j+9) {
-					
+					/*
 					string row2 = convertIntToStr((int)j/9);
 					string col2 = convertIntToStr((int)(j%9));
 
 					string var1 = t + row1 + col1;
 					string var2 = t + row2 + col2;
+					*/
+
+					string var1 = t + convertIntToStr(i+1);
+					string var2 = t + convertIntToStr(j+1);
 
 					string constraintName = c + u + var1 + u + var2;
 					writeSingleConstraint(constraintName, var1, var2);
@@ -188,9 +203,5 @@ class XMLComposer {
 				case 9 : return "9"; break;
 				default : return convertIntToStr(input/10) + convertIntToStr(input%10); break;
 			}
-		}
-
-		bool isSingleDomain () {
-			return false;
 		}
 };
