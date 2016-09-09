@@ -223,8 +223,51 @@ class XMLComposer {
 			}
 		}
 
-		void writeSingleBoxConstraint(int box) {
-			
+		void writeBoxConstraint() {
+			int start1 = 0;
+			string C = "C";
+			string U = "_";
+			for(int i=0;i<9;i++){
+
+			if(i==0){
+				start1 = 1; //inisialisasi awal
+			}else if(i % 3 ==0){
+				start1+=21;
+			}else{
+				start1+=3;
+			}
+		
+			//petakan ke index
+			int index[9];
+			int start2 = 0;
+			for(int j=0;j<9;j++){
+				if(j==0){
+					start2 = start1;
+				}else if(j % 3 == 0){
+					start2 +=7; 
+				}else{
+					start2 ++;
+				}
+				index[j] = start2;
+			}
+
+			//dapatkan pair kombinasi
+			for(int j=0;j<8;j++){
+				for(int k=j+1;k<9;k++){
+				
+					if(!(index[j]+1==index[k] || index[j]+2==index[k] || index[j]+9==index[k] || index[j]+18==index[k])){ //kondisi yang belum ada constraint
+					// panggil prosedur tulis constraint
+					//cout << index[j] << " " << index[k]<<endl;
+					int var1 = index[j];
+					int var2 = index[k];
+
+					string constraintName = C + U + convertIntToStr(var1) + U + convertIntToStr(var2);
+					writeSingleConstraint(constraintName, var1, var2);
+					}
+				}
+			//cout <<endl;	
+			}
+	}
 		}
 
 		void writeTrueFalse(int falsePlace) {

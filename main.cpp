@@ -14,6 +14,7 @@ int main() {
 		d.writeSingleHorizontalConstraint(i);
 		d.writeSingleVerticalConstraint(i);
 	}
+	d.writeBoxConstraint();
 	d.writeFooter();
 
 	d.close();
