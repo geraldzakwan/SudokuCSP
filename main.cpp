@@ -1,10 +1,12 @@
 #include "XMLComposer.cpp"
 
 int main() {
-	XMLComposer a("Variabel.xml");
-	XMLComposer b("HorizontalConstraintBaris0.xml");
-	XMLComposer c("VerticalConstraintKolom0.xml");
-	XMLComposer d("Final.xml");
+	//XMLComposer a("Variabel.xml");
+	//XMLComposer b("HorizontalConstraintBaris0.xml");
+	//XMLComposer c("VerticalConstraintKolom0.xml");
+	//XMLComposer d("Final.xml");
+	//XMLComposer d("Test.xml");
+	XMLComposer d("Final - 2.xml");
 
 	d.open();
 

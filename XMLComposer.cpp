@@ -12,8 +12,11 @@ class XMLComposer {
 		const char* fileName;
 
 	public:
+		int numberOfConstraint;
+
 		XMLComposer(const char* filename) {
 			fileName = filename;
+			numberOfConstraint = 0;
 			isiArray();
 		}
 
@@ -35,7 +38,7 @@ class XMLComposer {
 					tileKeisi[i] = 7;
 				}else if(i==19 || i==32){
 					tileKeisi[i] = 8;
-				}else if(i==1 || i==14 || i==54 || i==76){
+				}else if(i==1 || i==14 || i==54 || i==70 || i==76){
 					tileKeisi[i] = 9;
 				}else {
 					tileKeisi[i] = 0;
@@ -131,8 +134,11 @@ class XMLComposer {
 				}
 				outFile << endl;
 				outFile << "</TABLE>" << endl;
-				outFile << "<PROPERTY>position = (4622.507, 4338.3887)</PROPERTY>" << endl;
+				//outFile << "<PROPERTY>position = (4622.507, 4338.3887)</PROPERTY>" << endl;
+				outFile << "<PROPERTY>position = (2300.00, 375.00)</PROPERTY>" << endl;
 				outFile << "</CONSTRAINT>" << endl;
+				numberOfConstraint++;
+				//cout << var1 << "," << var2 << endl;
 			} else {
 				//Constraint 1x9
 				if (tileKeisi[var2] == 0) {
@@ -144,8 +150,11 @@ class XMLComposer {
 					writeTrueFalse(tileKeisi[var1]);
 					outFile << endl;
 					outFile << "</TABLE>" << endl;
-					outFile << "<PROPERTY>position = (4622.507, 4338.3887)</PROPERTY>" << endl;
+					//outFile << "<PROPERTY>position = (4622.507, 4338.3887)</PROPERTY>" << endl;
+					outFile << "<PROPERTY>position = (2300.00, 375.00)</PROPERTY>" << endl;
 					outFile << "</CONSTRAINT>" << endl;
+					numberOfConstraint++;
+					//cout << var1 << "," << var2 << endl;
 				} else {
 				//Constraint-nya ngk perlu
 				}
